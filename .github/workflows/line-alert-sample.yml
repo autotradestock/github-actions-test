@@ -1,0 +1,40 @@
+# line_alert (Slack) 알림 사용 샘플
+#
+# 사전 준비:
+#   GitHub 저장소 → Settings → Secrets and variables → Actions
+#   → New repository secret 으로 아래 항목 등록
+#
+#   SLACK_WEBHOOK_URL  :  https://hooks.slack.com/services/...
+#   (Slack 앱 → Incoming Webhooks에서 발급)
+#
+# 세팅법 참고: https://blog.naver.com/zacra/223622479916
+
+name: line_alert 샘플 (Slack 알림)
+
+on:
+  workflow_dispatch:        # GitHub 웹에서 수동 실행 (테스트용)
+  schedule:
+    - cron: '0 0 * * 1-5'  # 평일 매일 09:00 KST (= UTC 00:00)
+
+jobs:
+  send-alert:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 의존성 설치
+        run: pip install requests
+
+      - name: line_alert 알림 전송
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python line_alert_sample.py
