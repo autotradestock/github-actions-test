@@ -1,0 +1,29 @@
+# 퀀트 전략 실전 활용 예시: 매일 자동 실행 + API 키 안전하게 사용
+name: 퀀트 전략 일일 실행
+
+on:
+  schedule:
+    - cron: '30 0 * * 1-5'   # 평일 매일 09:30 KST (= UTC 00:30)
+  workflow_dispatch:
+
+jobs:
+  run-strategy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install -r requirements.txt
+
+      - name: 전략 실행 (API 키 주입)
+        env:
+          KIS_APP_KEY: ${{ secrets.KIS_APP_KEY }}        # 한국투자증권 앱키
+          KIS_APP_SECRET: ${{ secrets.KIS_APP_SECRET }}  # 한국투자증권 시크릿
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}  # 텔레그램 알림용
+        run: python main.py
