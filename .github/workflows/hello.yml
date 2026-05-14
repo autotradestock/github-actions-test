@@ -15,6 +15,8 @@ jobs:
   run-and-test:
     # 어떤 운영체제에서 실행할지 (GitHub이 제공하는 서버)
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       # 1단계: 내 저장소 코드를 서버로 가져오기 (필수)
