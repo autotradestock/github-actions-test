@@ -25,3 +25,6 @@ Thumbs.db        # Windows
 
 # 테스트 결과
 .pytest_cache/
+
+# Jupyter Notebook 자동 백업
+.ipynb_checkpoints/
