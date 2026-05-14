@@ -1,0 +1,27 @@
+# 스케줄로 자동 실행하는 예제 (예: 매일 오전 9시)
+name: 매일 자동 실행
+
+on:
+  schedule:
+    # cron 형식: 분 시 일 월 요일 (UTC 기준, 한국은 UTC+9)
+    # 아래는 매일 00:00 UTC = 한국 오전 9시
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 수동 실행도 가능하게
+
+jobs:
+  daily-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 자동 실행 스크립트
+        run: |
+          echo "오늘 날짜: $(date)"
+          python main.py

@@ -1,0 +1,40 @@
+# 워크플로우 이름 (GitHub Actions 탭에서 보이는 이름)
+name: Hello GitHub Actions
+
+# 언제 이 워크플로우를 실행할지 설정
+on:
+  push:                    # 코드를 push할 때마다 자동 실행
+    branches: [ main ]     # main 브랜치에 push할 때만
+  pull_request:            # PR을 열었을 때도 실행
+    branches: [ main ]
+  workflow_dispatch:       # GitHub 웹사이트에서 수동으로 실행 가능
+
+# 실제로 실행할 작업들
+jobs:
+  # 작업 이름 (아무 이름이나 가능)
+  run-and-test:
+    # 어떤 운영체제에서 실행할지 (GitHub이 제공하는 서버)
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1단계: 내 저장소 코드를 서버로 가져오기 (필수)
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      # 2단계: Python 설치
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3단계: 필요한 패키지 설치
+      - name: 패키지 설치
+        run: pip install pytest
+
+      # 4단계: 스크립트 실행
+      - name: main.py 실행
+        run: python main.py
+
+      # 5단계: 테스트 실행
+      - name: 테스트 실행
+        run: pytest test_main.py -v
