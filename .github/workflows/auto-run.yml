@@ -1,0 +1,25 @@
+name: 자동 실행 예제
+
+on:
+  # 5분마다 자동 실행 (GitHub 최소 단위)
+  schedule:
+    - cron: '*/5 * * * *'
+
+  # GitHub 웹에서 수동으로도 실행 가능 (테스트용)
+  workflow_dispatch:
+
+jobs:
+  auto-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Python 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 리포트 자동 실행
+        run: python auto_report.py
